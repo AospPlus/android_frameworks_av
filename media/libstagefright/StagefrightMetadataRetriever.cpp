@@ -433,7 +433,7 @@ const char *StagefrightMetadataRetriever::extractMetadata(int keyCode) {
         return NULL;
     }
 
-    return mMetaData.valueAt(index).string();
+    return strdup(mMetaData.valueAt(index).string());
 }
 
 void StagefrightMetadataRetriever::parseMetaData() {

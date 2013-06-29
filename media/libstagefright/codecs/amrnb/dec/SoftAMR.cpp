@@ -154,7 +154,7 @@ OMX_ERRORTYPE SoftAMR::internalGetParameter(
 
             amrParams->nChannels = 1;
             amrParams->eAMRDTXMode = OMX_AUDIO_AMRDTXModeOff;
-            amrParams->eAMRFrameFormat = OMX_AUDIO_AMRFrameFormatFSF;
+            amrParams->eAMRFrameFormat = OMX_AUDIO_AMRFrameFormatConformance;
 
             if (!isConfigured()) {
                 amrParams->nBitRate = 0;

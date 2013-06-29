@@ -49,8 +49,6 @@ static const char kCmdDeadlockedString[] = "AudioPolicyService command thread ma
 static const int kDumpLockRetries = 50;
 static const int kDumpLockSleepUs = 20000;
 
-static const nsecs_t kAudioCommandTimeout = 3000000000; // 3 seconds
-
 namespace {
     extern struct audio_policy_service_ops aps_ops;
 };
@@ -706,7 +704,7 @@ bool AudioPolicyService::AudioCommandThread::threadLoop()
                                                                     data->mIO);
                     if (command->mWaitStatus) {
                         command->mCond.signal();
-                        command->mCond.waitRelative(mLock, kAudioCommandTimeout);
+                        mWaitWorkCV.wait(mLock);
                     }
                     delete data;
                     }break;
@@ -717,7 +715,7 @@ bool AudioPolicyService::AudioCommandThread::threadLoop()
                     command->mStatus = AudioSystem::setParameters(data->mIO, data->mKeyValuePairs);
                     if (command->mWaitStatus) {
                         command->mCond.signal();
-                        command->mCond.waitRelative(mLock, kAudioCommandTimeout);
+                        mWaitWorkCV.wait(mLock);
                     }
                     delete data;
                     }break;
@@ -728,7 +726,7 @@ bool AudioPolicyService::AudioCommandThread::threadLoop()
                     command->mStatus = AudioSystem::setVoiceVolume(data->mVolume);
                     if (command->mWaitStatus) {
                         command->mCond.signal();
-                        command->mCond.waitRelative(mLock, kAudioCommandTimeout);
+                        mWaitWorkCV.wait(mLock);
                     }
                     delete data;
                     }break;
@@ -836,7 +834,7 @@ status_t AudioPolicyService::AudioCommandThread::volumeCommand(audio_stream_type
     if (command->mWaitStatus) {
         command->mCond.wait(mLock);
         status =  command->mStatus;
-        command->mCond.signal();
+        mWaitWorkCV.signal();
     }
     return status;
 }
@@ -861,7 +859,7 @@ status_t AudioPolicyService::AudioCommandThread::parametersCommand(audio_io_hand
     if (command->mWaitStatus) {
         command->mCond.wait(mLock);
         status =  command->mStatus;
-        command->mCond.signal();
+        mWaitWorkCV.signal();
     }
     return status;
 }
@@ -882,7 +880,7 @@ status_t AudioPolicyService::AudioCommandThread::voiceVolumeCommand(float volume
     if (command->mWaitStatus) {
         command->mCond.wait(mLock);
         status =  command->mStatus;
-        command->mCond.signal();
+        mWaitWorkCV.signal();
     }
     return status;
 }

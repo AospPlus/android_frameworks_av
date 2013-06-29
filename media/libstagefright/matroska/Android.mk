@@ -5,7 +5,7 @@ LOCAL_SRC_FILES:=                 \
         MatroskaExtractor.cpp
 
 LOCAL_C_INCLUDES:= \
-        $(TOP)/external/libvpx/libwebm \
+        $(TOP)/external/libvpx/mkvparser \
         $(TOP)/frameworks/native/include/media/openmax \
 
 LOCAL_CFLAGS += -Wno-multichar

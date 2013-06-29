@@ -311,7 +311,9 @@ static status_t parseStreamMuxConfig(
 
         case 2:
         {
-            return ERROR_UNSUPPORTED;
+            // reserved
+            TRESPASS();
+            break;
         }
 
         case 3:
@@ -458,15 +460,6 @@ AMPEG4AudioAssembler::AMPEG4AudioAssembler(
             &mFixedFrameLength,
             &mOtherDataPresent, &mOtherDataLenBits);
 
-    if (err == ERROR_UNSUPPORTED) {
-        ALOGW("Failed to parse stream mux config, using default values for playback.");
-        mMuxConfigPresent = false;
-        mNumSubFrames = 0;
-        mFrameLengthType = 0;
-        mOtherDataPresent = false;
-        mOtherDataLenBits = 0;
-        return;
-    }
     CHECK_EQ(err, (status_t)NO_ERROR);
 }
 
