@@ -396,8 +396,9 @@ status_t AudioPolicyService::setStreamVolumeIndex(audio_stream_type_t stream,
                                                                 stream,
                                                                 index,
                                                                 device);
-    } else {
+    } else 
 #endif
+    {
         return mpAudioPolicy->set_stream_volume_index(mpAudioPolicy, stream, index);
     }
 }
