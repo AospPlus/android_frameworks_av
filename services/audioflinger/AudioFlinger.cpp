@@ -747,6 +747,9 @@ status_t AudioFlinger::setMasterMute(bool muted)
     // mute will simply ignore the setting.
     for (size_t i = 0; i < mPlaybackThreads.size(); i++)
         mPlaybackThreads.valueAt(i)->setMasterMute(muted);
+#else
+    mHardwareStatus = AUDIO_HW_IDLE;
+#endif
 
     return NO_ERROR;
 }
