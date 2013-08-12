@@ -664,6 +664,10 @@ public:
     // other modes.
     static const char FOCUS_MODE_CONTINUOUS_PICTURE[];
 
+#ifdef HTC_CAMERA_HARDWARE
+    static const char KEY_FORCE_USE_AUDIO_ENABLED[];
+#endif
+
 private:
     DefaultKeyedVector<String8,String8>    mMap;
 };
