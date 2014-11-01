@@ -304,6 +304,11 @@ audio_io_handle_t AudioPolicyService::getInput(audio_source_t inputSource,
         return 0;
     }
 
+#ifdef HAVE_PRE_KITKAT_AUDIO_POLICY_BLOB
+    if (inputSource == AUDIO_SOURCE_HOTWORD)
+      inputSource = AUDIO_SOURCE_VOICE_RECOGNITION;
+#endif
+
     Mutex::Autolock _l(mLock);
     // the audio_in_acoustics_t parameter is ignored by get_input()
     audio_io_handle_t input = mpAudioPolicy->get_input(mpAudioPolicy, inputSource, samplingRate,
@@ -530,6 +535,11 @@ bool AudioPolicyService::isSourceActive(audio_source_t source) const
     if (mpAudioPolicy->is_source_active == 0) {
         return false;
     }
+#ifdef HAVE_PRE_KITKAT_AUDIO_POLICY_BLOB
+    if (source == AUDIO_SOURCE_HOTWORD)
+      source = AUDIO_SOURCE_VOICE_RECOGNITION;
+#endif
+
     Mutex::Autolock _l(mLock);
     return mpAudioPolicy->is_source_active(mpAudioPolicy, source);
 }
@@ -1137,6 +1147,9 @@ int AudioPolicyService::setVoiceVolume(float volume, int delayMs)
 
 bool AudioPolicyService::isOffloadSupported(const audio_offload_info_t& info)
 {
+#ifdef HAVE_PRE_KITKAT_AUDIO_BLOB
+    return false;
+#endif
     if (mpAudioPolicy == NULL) {
         ALOGV("mpAudioPolicy == NULL");
         return false;
